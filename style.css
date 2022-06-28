@@ -1,0 +1,79 @@
+
+/* font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    margin: 0;
+    width: 100%;
+    height: auto;
+    background-image: url(static/img/game_background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+.start_btn_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.start_btn {
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    width: 200px;
+    height: 45px;
+    font-size: 20px;
+    cursor: pointer;
+    background: none;
+    color: #fff;
+    border-color: #fff;
+    border-radius: 3px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.stop_btn {
+    position:absolute;
+    right: 30px;
+    top: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    background-color: transparent;
+    border-color: #fff;
+    border-radius: 3px;
+    border: solid 2px #fff;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.count_menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer {
+    display: flex;
+    color: #fff;
+    font-size: 20px;
+    border: solid 2px;
+    border-radius: 3px;
+    font-family: 'Press Start 2P', cursive;
+    margin: 20px 10px;
+    padding: 10px 25px;
+
+}
+
+.count__number {
+    display: flex;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    margin: 5px;
+    padding: 15px 10px;
+    border: solid 2px;
+    border-radius: 50%;
+}
