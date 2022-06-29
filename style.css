@@ -12,6 +12,10 @@ body {
 
 }
 
+.hidden {
+    display: none;
+}
+
 .start_btn_container {
     display: flex;
     justify-content: center;
