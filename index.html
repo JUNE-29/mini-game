@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>mini-game</title>
+    <script src="https://kit.fontawesome.com/5b865e8a30.js" crossorigin="anonymous"></script>
     <script src="main.js" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="start_btn_container">
-        <button class="start_btn">START</button>
-    </div>
-    <button class="stop_btn hidden">■</button>
     <div class="count_menu">
         <div class="timer"> 00:<span class="second">00</span></div>
         <div class="count__number"> 10 </div>
+    </div>
+    <button class="stop_btn hidden">■</button>
+    <div class="start_btn_container">
+        <button class="start_btn">START</button>
+    </div>
+    <div class="replay_container ">
+        <div class="replay_box hidden">
+            <button class="replay_btn"><i class="fa-solid fa-rotate-right"></i></button>
+            <p class="replay_contents">replay?</p>
+            <p class="replay_contents">🤖</p>
+        </div>
     </div>
     <audio class="bg_sound" src="static/audio/bg.mp3"></audio>
 </body>
