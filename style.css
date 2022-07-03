@@ -121,3 +121,10 @@ body {
     border: solid 2px;
     border-radius: 50%;
 }
+
+/* characters */
+
+.cat {
+    position: absolute;
+    width: 70px;
+}

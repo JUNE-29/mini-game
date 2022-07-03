@@ -2,6 +2,7 @@ const startBtn = document.querySelector('.start_btn');
 const stopBtn = document.querySelector('.stop_btn');
 const replayBtn = document.querySelector('.replay_btn');
 const replayBox = document.querySelector('.replay_box');
+const cat = document.querySelector('.cat');
 
 const sec = document.querySelector('.second');
 
@@ -10,6 +11,13 @@ const bgSound = document.querySelector('.bg_sound');
 let timeout;
 let seconds = 10;
 
+function AddHiddenClass(name) {
+   name.classList.add('hidden');
+}
+
+function RemoveHiddenClass(name) {
+   name.classList.remove('hidden');
+}
 
 function CountStop() {
    clearTimeout(timeout);
@@ -27,35 +35,54 @@ function CountTime() {
    seconds--;
 
    if(seconds < 0) {
-      stopBtn.classList.add('hidden');
-      startBtn.classList.remove('hidden');
+      AddHiddenClass(stopBtn);
+      RemoveHiddenClass(startBtn);
       StopMusic();
       return;
    }
-    timeout = setTimeout(CountTime, 1000);
+   timeout = setTimeout(CountTime, 1000);
 }
 
 function StartGame() {
    bgSound.play();
    CountStop();
-   startBtn.classList.add('hidden');
-   stopBtn.classList.remove('hidden');
+   AddHiddenClass(startBtn);
+   RemoveHiddenClass(stopBtn);
    CountTime();
 }
 
+function getRandomIntInclusive(min, max) {
+   min = Math.ceil(min);
+   max = Math.floor(max);
+   return Math.floor(Math.random() * (max - min + 1)) + min; 
+}
+
+function RandomCoordinate(name) {
+   let x = getRandomIntInclusive(40, 1400);
+   let y = getRandomIntInclusive(230, 481);
+
+   name.style.left=`${x}px`;
+   name.style.top = `${y}px`;
+}
+
+
 startBtn.addEventListener('click', () => {
    StartGame();
+   RemoveHiddenClass(cat);
+   RandomCoordinate(cat);
+
 });
 
 stopBtn.addEventListener('click',()=>{
-   replayBox.classList.remove('hidden');
+   RemoveHiddenClass(replayBox);
+   AddHiddenClass(cat);
    CountStop();
    StopMusic();
 });
 
 replayBtn.addEventListener('click',()=>{
-   replayBox.classList.add('hidden');
+   AddHiddenClass(replayBox);
+   RemoveHiddenClass(cat);
    StartGame();
+   RandomCoordinate(cat);
 });
-
-
