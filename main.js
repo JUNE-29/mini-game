@@ -3,12 +3,17 @@ const stopBtn = document.querySelector('.stop_btn');
 const replayBtn = document.querySelector('.replay_btn');
 const replayBox = document.querySelector('.replay_box');
 const catsImages = document.querySelector('.cats_images');
+const alienImages = document.querySelector('.alien_images');
 
 const sec = document.querySelector('.second');
 
 const bgSound = document.querySelector('.bg_sound');
 
 const numberOfCats = 10;
+const cat = 'cat';
+
+const numberOfAliens = 7;
+const alien = 'alien';
 
 let timeout;
 let seconds = 10;
@@ -38,7 +43,7 @@ function countTime() {
 
    if(seconds < 0) {
       addHiddenClass(stopBtn);
-      // addHiddenClass(cat);
+      removeCharacters(numberOfCats);
       removeHiddenClass(startBtn);
       stopMusic();
       return;
@@ -60,54 +65,70 @@ function getRandomIntInclusive(min, max) {
    return Math.floor(Math.random() * (max - min + 1)) + min; 
 }
 
-function addCharacter(index) {
+function addCharacter(index, characterName) {
    let number = index;
    let character;
 
    for (i = 0; number > i; i++) {
-      character = createCharacter();
-      catsImages.appendChild(character);
+      if(characterName === 'cat') {
+         character = createCharacters(cat);
+         catsImages.appendChild(character);
+      }else if(characterName === 'alien') {
+         character = createCharacters(alien);
+         alienImages.appendChild(character);
+      }
    }
-   
 }
-
-function createCharacter() {
-   let x = getRandomIntInclusive(40, 1400);
-   let y = getRandomIntInclusive(230, 481);
-
-      const character = document.createElement('img');
+   
+function createCharacters(characterName) {
+   let x = getRandomIntInclusive(40, 1300);
+   let y = getRandomIntInclusive(230, 450);
+  
+   const character = document.createElement('img');
+   if(characterName === 'cat') {
       character.setAttribute('class', 'cat');
       character.setAttribute('src', 'static/img/cat.png');
-   
-      character.style.left=`${x}px`;
-      character.style.top = `${y}px`;
+
+   } else if(characterName === 'alien') {
+      character.setAttribute('class', 'alien');
+      character.setAttribute('src', 'static/img/alien.png');
+   }
+      character.style.left =`${x}px`;
+      character.style.top =`${y}px`;
       return character;
 }
 
-function removeChatacter(index) {
+function removeCharacters(index, characterName) {
    let number = index;
-   let character;
 
    for (i = 0; number > i; i++) {
-      const cat = document.querySelector('.cat');
-      cat.remove();
+      if(characterName === 'cat') {
+         const cats = document.querySelector('.cat');
+         cats.remove();
+      } else if(characterName === 'alien') { 
+         const aliens =  document.querySelector('.alien');
+         aliens.remove();
+      }
    }
 }
 
 startBtn.addEventListener('click', () => {
    startGame();
-   addCharacter(numberOfCats);
+   addCharacter(numberOfCats, cat);
+   addCharacter(numberOfAliens, alien);
 });
 
 stopBtn.addEventListener('click',()=>{
    removeHiddenClass(replayBox);
-   removeChatacter(numberOfCats);
+   removeCharacters(numberOfCats, cat);
+   removeCharacters(numberOfAliens, alien);
    countStop();
    stopMusic();
 });
 
 replayBtn.addEventListener('click',()=>{
    addHiddenClass(replayBox);
-   addCharacter(numberOfCats);
+   addCharacter(numberOfCats, cat);
+   addCharacter(numberOfAliens, alien);
    startGame();
 });

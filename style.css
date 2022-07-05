@@ -126,5 +126,10 @@ body {
 
 .cat {
     position: absolute;
-    width: 70px;
+    width: 100px;
+}
+
+.alien {
+    position: absolute;
+    width: 100px;
 }
