@@ -1,7 +1,12 @@
 const startBtn = document.querySelector('.start_btn');
 const stopBtn = document.querySelector('.stop_btn');
+
 const replayBtn = document.querySelector('.replay_btn');
 const replayBox = document.querySelector('.replay_box');
+
+const lostBox = document.querySelector('.youLost_box');
+const lostReplayBtn = document.querySelector('.lost_replay_btn');
+
 const catsImages = document.querySelector('.cats_images');
 const alienImages = document.querySelector('.alien_images');
 
@@ -43,7 +48,8 @@ function countTime() {
 
    if(seconds < 0) {
       addHiddenClass(stopBtn);
-      removeCharacters(numberOfCats);
+      removeCharacters(numberOfCats, cat);
+      removeCharacters(numberOfAliens, alien);
       removeHiddenClass(startBtn);
       stopMusic();
       return;
@@ -70,10 +76,10 @@ function addCharacter(index, characterName) {
    let character;
 
    for (i = 0; number > i; i++) {
-      if(characterName === 'cat') {
+      if(characterName === cat) {
          character = createCharacters(cat);
          catsImages.appendChild(character);
-      }else if(characterName === 'alien') {
+      }else if(characterName === alien) {
          character = createCharacters(alien);
          alienImages.appendChild(character);
       }
@@ -85,13 +91,14 @@ function createCharacters(characterName) {
    let y = getRandomIntInclusive(230, 450);
   
    const character = document.createElement('img');
-   if(characterName === 'cat') {
-      character.setAttribute('class', 'cat');
+   if(characterName === cat) {
+      character.setAttribute('class', cat);
       character.setAttribute('src', 'static/img/cat.png');
 
-   } else if(characterName === 'alien') {
-      character.setAttribute('class', 'alien');
+   } else if(characterName === alien) {
+      character.setAttribute('class', alien);
       character.setAttribute('src', 'static/img/alien.png');
+      character.setAttribute('data-name', alien);
    }
       character.style.left =`${x}px`;
       character.style.top =`${y}px`;
@@ -102,10 +109,10 @@ function removeCharacters(index, characterName) {
    let number = index;
 
    for (i = 0; number > i; i++) {
-      if(characterName === 'cat') {
+      if(characterName === cat) {
          const cats = document.querySelector('.cat');
          cats.remove();
-      } else if(characterName === 'alien') { 
+      } else if(characterName === alien) { 
          const aliens =  document.querySelector('.alien');
          aliens.remove();
       }
@@ -126,8 +133,27 @@ stopBtn.addEventListener('click',()=>{
    stopMusic();
 });
 
+alienImages.addEventListener('click', event => {
+   let aliens = event.target.dataset.name;
+   
+   if(aliens) {
+      removeHiddenClass(lostBox);
+      removeCharacters(numberOfCats, cat);
+      removeCharacters(numberOfAliens, alien);
+      countStop();
+      stopMusic();
+   }
+});
+
 replayBtn.addEventListener('click',()=>{
    addHiddenClass(replayBox);
+   addCharacter(numberOfCats, cat);
+   addCharacter(numberOfAliens, alien);
+   startGame();
+});
+
+lostReplayBtn.addEventListener('click',()=>{
+   addHiddenClass(lostBox);
    addCharacter(numberOfCats, cat);
    addCharacter(numberOfAliens, alien);
    startGame();
