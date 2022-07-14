@@ -8,7 +8,10 @@ const lostBox = document.querySelector('.youLost_box');
 const lostReplayBtn = document.querySelector('.lost_replay_btn');
 
 const catsImages = document.querySelector('.cats_images');
+const catSound = document.querySelector('.cat_pull_audio');
+
 const alienImages = document.querySelector('.alien_images');
+const alienSound = document.querySelector('.alien_pull_audio');
 
 const sec = document.querySelector('.second');
 
@@ -94,6 +97,7 @@ function createCharacters(characterName) {
    if(characterName === cat) {
       character.setAttribute('class', cat);
       character.setAttribute('src', 'static/img/cat.png');
+      character.setAttribute('data-name', cat);
 
    } else if(characterName === alien) {
       character.setAttribute('class', alien);
@@ -133,17 +137,6 @@ stopBtn.addEventListener('click',()=>{
    stopMusic();
 });
 
-alienImages.addEventListener('click', event => {
-   let aliens = event.target.dataset.name;
-   
-   if(aliens) {
-      removeHiddenClass(lostBox);
-      removeCharacters(numberOfCats, cat);
-      removeCharacters(numberOfAliens, alien);
-      countStop();
-      stopMusic();
-   }
-});
 
 replayBtn.addEventListener('click',()=>{
    addHiddenClass(replayBox);
@@ -157,4 +150,25 @@ lostReplayBtn.addEventListener('click',()=>{
    addCharacter(numberOfCats, cat);
    addCharacter(numberOfAliens, alien);
    startGame();
+});
+
+
+alienImages.addEventListener('click', event => {
+   let aliens = event.target.dataset.name;
+
+   alienSound.play();
+   
+   if(aliens) {
+      removeHiddenClass(lostBox);
+      removeCharacters(numberOfCats, cat);
+      removeCharacters(numberOfAliens, alien);
+      countStop();
+      stopMusic();
+   }
+});
+
+
+catsImages.addEventListener('click', event => {
+   let cats = event.target.dataset.name;
+   catSound.play();
 });

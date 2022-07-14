@@ -127,9 +127,11 @@ body {
 .cat {
     position: absolute;
     width: 100px;
+    cursor: pointer;
 }
 
 .alien {
     position: absolute;
     width: 100px;
+    cursor: pointer;
 }
