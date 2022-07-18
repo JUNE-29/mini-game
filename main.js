@@ -17,8 +17,11 @@ const sec = document.querySelector('.second');
 
 const bgSound = document.querySelector('.bg_sound');
 
+const countNum = document.querySelector('.count__number');
+
 const numberOfCats = 10;
 const cat = 'cat';
+let arrOfCats = [];
 
 const numberOfAliens = 7;
 const alien = 'alien';
@@ -49,9 +52,19 @@ function countTime() {
 
    seconds--;
 
+   if(arrOfCats.length == 0) {
+      removeCharacters(numberOfAliens, alien);
+      removeHiddenClass(replayBox);
+      countStop();
+      stopMusic();
+      return;
+   }
+
    if(seconds < 0) {
       addHiddenClass(stopBtn);
-      removeCharacters(numberOfCats, cat);
+      if(arrOfCats.length > 0) {
+         removeCharacters(numberOfCats, cat);
+      }
       removeCharacters(numberOfAliens, alien);
       removeHiddenClass(startBtn);
       stopMusic();
@@ -63,6 +76,7 @@ function countTime() {
 function startGame() {
    bgSound.play();
    countStop();
+   countNum.innerText=`10`;
    addHiddenClass(startBtn);
    removeHiddenClass(stopBtn);
    countTime();
@@ -74,14 +88,20 @@ function getRandomIntInclusive(min, max) {
    return Math.floor(Math.random() * (max - min + 1)) + min; 
 }
 
+let id = 0;
+
 function addCharacter(index, characterName) {
    let number = index;
    let character;
+
+   id = 0;
 
    for (i = 0; number > i; i++) {
       if(characterName === cat) {
          character = createCharacters(cat);
          catsImages.appendChild(character);
+         arrOfCats.push(id);
+         id++;
       }else if(characterName === alien) {
          character = createCharacters(alien);
          alienImages.appendChild(character);
@@ -92,12 +112,13 @@ function addCharacter(index, characterName) {
 function createCharacters(characterName) {
    let x = getRandomIntInclusive(40, 1300);
    let y = getRandomIntInclusive(230, 450);
-  
+
    const character = document.createElement('img');
    if(characterName === cat) {
       character.setAttribute('class', cat);
       character.setAttribute('src', 'static/img/cat.png');
       character.setAttribute('data-name', cat);
+      character.setAttribute('data-id', id);
 
    } else if(characterName === alien) {
       character.setAttribute('class', alien);
@@ -124,9 +145,9 @@ function removeCharacters(index, characterName) {
 }
 
 startBtn.addEventListener('click', () => {
-   startGame();
    addCharacter(numberOfCats, cat);
    addCharacter(numberOfAliens, alien);
+   startGame();
 });
 
 stopBtn.addEventListener('click',()=>{
@@ -169,6 +190,17 @@ alienImages.addEventListener('click', event => {
 
 
 catsImages.addEventListener('click', event => {
-   let cats = event.target.dataset.name;
+   let index = event.target.dataset.id;
+
    catSound.play();
+
+   if(index) {
+      arrOfCats.pop();
+      const toBeDeleted = document.querySelector(`.cat[data-id="${index}"]`);
+      toBeDeleted.remove();
+      countNum.innerText=`${arrOfCats.length.toString().padStart(2,"0")}`;
+      console.log(arrOfCats.length);
+   }
+
 });
+
