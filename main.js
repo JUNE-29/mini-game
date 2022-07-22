@@ -25,6 +25,7 @@ let arrOfCats = [];
 
 const numberOfAliens = 7;
 const alien = 'alien';
+let arrOfAliens = [];
 
 let timeout;
 let seconds = 10;
@@ -53,19 +54,17 @@ function countTime() {
    seconds--;
 
    if(arrOfCats.length == 0) {
-      removeCharacters(numberOfAliens, alien);
-      removeHiddenClass(replayBox);
       countStop();
       stopMusic();
+      removeCharacters(alien);
+      removeHiddenClass(replayBox);
       return;
    }
 
    if(seconds < 0) {
       addHiddenClass(stopBtn);
-      if(arrOfCats.length > 0) {
-         removeCharacters(numberOfCats, cat);
-      }
-      removeCharacters(numberOfAliens, alien);
+      removeCharacters(cat);
+      removeCharacters(alien);
       removeHiddenClass(startBtn);
       stopMusic();
       return;
@@ -90,18 +89,14 @@ function getRandomIntInclusive(min, max) {
 
 let id = 0;
 
-function addCharacter(index, characterName) {
-   let number = index;
+function addCharacter(numberOf, characterName) {
+   let number = numberOf;
    let character;
-
-   id = 0;
 
    for (i = 0; number > i; i++) {
       if(characterName === cat) {
          character = createCharacters(cat);
          catsImages.appendChild(character);
-         arrOfCats.push(id);
-         id++;
       }else if(characterName === alien) {
          character = createCharacters(alien);
          alienImages.appendChild(character);
@@ -119,29 +114,30 @@ function createCharacters(characterName) {
       character.setAttribute('src', 'static/img/cat.png');
       character.setAttribute('data-name', cat);
       character.setAttribute('data-id', id);
+      arrOfCats.push(character);
+      id ++;
 
    } else if(characterName === alien) {
       character.setAttribute('class', alien);
       character.setAttribute('src', 'static/img/alien.png');
       character.setAttribute('data-name', alien);
+      arrOfAliens.push(character);
    }
       character.style.left =`${x}px`;
       character.style.top =`${y}px`;
       return character;
 }
 
-function removeCharacters(index, characterName) {
-   let number = index;
+function removeCharacters(characterName) {
 
-   for (i = 0; number > i; i++) {
       if(characterName === cat) {
-         const cats = document.querySelector('.cat');
-         cats.remove();
-      } else if(characterName === alien) { 
-         const aliens =  document.querySelector('.alien');
-         aliens.remove();
+         arrOfCats.forEach((cats)=>{cats.remove();});
+         arrOfCats = [];
+      } 
+      else if(characterName === alien) { 
+         arrOfAliens.forEach((aliens)=>{aliens.remove();});
+         arrOfAliens = [];
       }
-   }
 }
 
 startBtn.addEventListener('click', () => {
@@ -152,9 +148,9 @@ startBtn.addEventListener('click', () => {
 
 stopBtn.addEventListener('click',()=>{
    removeHiddenClass(replayBox);
-   removeCharacters(numberOfCats, cat);
-   removeCharacters(numberOfAliens, alien);
    countStop();
+   removeCharacters(cat);
+   removeCharacters(alien);
    stopMusic();
 });
 
@@ -181,8 +177,8 @@ alienImages.addEventListener('click', event => {
    
    if(aliens) {
       removeHiddenClass(lostBox);
-      removeCharacters(numberOfCats, cat);
-      removeCharacters(numberOfAliens, alien);
+      removeCharacters(cat);
+      removeCharacters(alien);
       countStop();
       stopMusic();
    }
@@ -195,12 +191,11 @@ catsImages.addEventListener('click', event => {
    catSound.play();
 
    if(index) {
-      arrOfCats.pop();
-      const toBeDeleted = document.querySelector(`.cat[data-id="${index}"]`);
-      toBeDeleted.remove();
+      arrOfCats.pop(index);
+      const catDelete = document.querySelector(`.cat[data-id="${index}"]`);
+      catDelete.remove();
       countNum.innerText=`${arrOfCats.length.toString().padStart(2,"0")}`;
       console.log(arrOfCats.length);
    }
-
 });
 
