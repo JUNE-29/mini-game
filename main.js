@@ -65,7 +65,7 @@ function countTime() {
       addHiddenClass(stopBtn);
       removeCharacters(cat);
       removeCharacters(alien);
-      removeHiddenClass(startBtn);
+      removeHiddenClass(lostBox);
       stopMusic();
       return;
    }
