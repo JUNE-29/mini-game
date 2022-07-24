@@ -1,41 +1,68 @@
+@import "font.css";
 
-/* font */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Global */
+:root {
+    /* colors */
+    --color--dark-black: #050A21;
+    --color--white: #fff;
+}
 
+/* Universal tags */
 body {
-    margin: 0;
-    width: 100%;
-    height: auto;
-    background-image: url(static/img/game_background.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
+    text-align: center;
+    background-color: var(--color--dark-black);
+}
 
+button {
+    cursor: pointer;
 }
 
 .hidden {
     display: none;
 }
 
-.start_btn_container {
+/* background */
+
+.game {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    
+    flex-direction: column;
+    margin: 0;
+    width: 900px;
+    height: 500px;
+    background: url(static/img/game_background.png) center/cover;
+    margin: auto;
 }
-.start_btn {
-    position: absolute;
-    top: 50%;
-    text-align: center;
-    width: 200px;
-    height: 45px;
+
+
+/* game-header */
+.count_menu {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.game__timer {
+    display: flex;
+    color: var(--color--white);
     font-size: 20px;
-    cursor: pointer;
-    background: none;
-    color: #fff;
-    border-color: #fff;
+    border: solid 2px;
     border-radius: 3px;
     font-family: 'Press Start 2P', cursive;
+    margin: 20px 10px;
+    padding: 10px 25px;
+
+}
+
+.game__score {
+    display: flex;
+    color: var(--color--white);
+    font-family: 'Press Start 2P', cursive;
+    margin: 5px;
+    padding: 15px 10px;
+    border: solid 2px;
+    border-radius: 50%;
 }
 
 .stop_btn {
@@ -46,92 +73,88 @@ body {
     height: 45px;
     font-size: 20px;
     background-color: transparent;
-    border-color: #fff;
+    border-color: var(--color--white);
     border-radius: 3px;
-    border: solid 2px #fff;
-    color: #fff;
-    cursor: pointer;
+    border: solid 2px var(--color--white);
+    color: var(--color--white);
     font-family: 'Press Start 2P', cursive;
 }
 
+/* game-field */
+.start_btn_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.start_btn {
+    position: absolute;
+    top: 35%;
+    text-align: center;
+    width: 150px;
+    height: 45px;
+    font-size: 15px;
+    background: none;
+    color: var(--color--white);
+    border-color: var(--color--white);
+    border-radius: 3px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.start_btn:hover {
+    transform: scale(1.1);
+}
+
+/* pop-up */
 .pop_up_container {
+    position: relative;
     display:flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    transform: translateY(15%);
 }
 
 .pop_up_box {
+    z-index: 1;
     justify-content: center;
     text-align: center;
+    width:150px;
     padding: 30px 50px;
-    background-color: #fff;
-    background: rgba(255, 255, 255, 0.2);
-    border: solid 2px #fff;
+    background-color: var(--color--white);
+    background: rgba(0, 0, 0, 0.7);
+    border: solid 2px var(--color--white);
     border-radius: 3px;
 }
 
-.btn_st_01 {
+.pop_up_btn {
     border: none;
     background: none;
     font-size: 50px;
-    color: #fff;
-    cursor:pointer;
-    margin: 20px;
+    color: var(--color--white);
+    margin: 10px;
     transition: all 300ms ease-in;
 }
 
-.btn_st_01:hover {
+.pop_up_btn:hover {
     color: #fef84a;
     transform: scale(1.1);
 }
 
 .pop_up_contents {
     font-size: 20px;
-    color: #fff;
+    color: var(--color--white);
     font-family: 'Press Start 2P', cursive;
 }
 
-.count_menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.timer {
-    display: flex;
-    color: #fff;
-    font-size: 20px;
-    border: solid 2px;
-    border-radius: 3px;
-    font-family: 'Press Start 2P', cursive;
-    margin: 20px 10px;
-    padding: 10px 25px;
-
-}
-
-.count__number {
-    display: flex;
-    color: #fff;
-    font-family: 'Press Start 2P', cursive;
-    margin: 5px;
-    padding: 15px 10px;
-    border: solid 2px;
-    border-radius: 50%;
-}
 
 /* characters */
-
 .cat {
     position: absolute;
-    width: 100px;
     cursor: pointer;
 }
 
 .alien {
     position: absolute;
-    width: 100px;
     cursor: pointer;
 }

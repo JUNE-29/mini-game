@@ -13,11 +13,11 @@ const catSound = document.querySelector('.cat_pull_audio');
 const alienImages = document.querySelector('.alien_images');
 const alienSound = document.querySelector('.alien_pull_audio');
 
-const sec = document.querySelector('.second');
+const sec = document.querySelector('.timer__second');
 
 const bgSound = document.querySelector('.bg_sound');
 
-const countNum = document.querySelector('.count__number');
+const countNum = document.querySelector('.game__score');
 
 const numberOfCats = 10;
 const cat = 'cat';
@@ -56,7 +56,6 @@ function countTime() {
    if(arrOfCats.length == 0) {
       countStop();
       stopMusic();
-      removeCharacters(alien);
       removeHiddenClass(replayBox);
       return;
    }
@@ -87,11 +86,13 @@ function getRandomIntInclusive(min, max) {
    return Math.floor(Math.random() * (max - min + 1)) + min; 
 }
 
-let id = 0;
+let id = 10;
 
 function addCharacter(numberOf, characterName) {
    let number = numberOf;
    let character;
+
+   // id = 0;
 
    for (i = 0; number > i; i++) {
       if(characterName === cat) {
@@ -105,8 +106,8 @@ function addCharacter(numberOf, characterName) {
 }
    
 function createCharacters(characterName) {
-   let x = getRandomIntInclusive(40, 1300);
-   let y = getRandomIntInclusive(230, 450);
+   let x = getRandomIntInclusive(100, 900);
+   let y = getRandomIntInclusive(200, 400);
 
    const character = document.createElement('img');
    if(characterName === cat) {
@@ -115,7 +116,7 @@ function createCharacters(characterName) {
       character.setAttribute('data-name', cat);
       character.setAttribute('data-id', id);
       arrOfCats.push(character);
-      id ++;
+      id++;
 
    } else if(characterName === alien) {
       character.setAttribute('class', alien);
@@ -129,8 +130,8 @@ function createCharacters(characterName) {
 }
 
 function removeCharacters(characterName) {
-
       if(characterName === cat) {
+         console.log(arrOfCats);
          arrOfCats.forEach((cats)=>{cats.remove();});
          arrOfCats = [];
       } 
@@ -149,13 +150,13 @@ startBtn.addEventListener('click', () => {
 stopBtn.addEventListener('click',()=>{
    removeHiddenClass(replayBox);
    countStop();
-   removeCharacters(cat);
-   removeCharacters(alien);
    stopMusic();
 });
 
 
 replayBtn.addEventListener('click',()=>{
+   removeCharacters(cat);
+   removeCharacters(alien);
    addHiddenClass(replayBox);
    addCharacter(numberOfCats, cat);
    addCharacter(numberOfAliens, alien);
@@ -163,6 +164,8 @@ replayBtn.addEventListener('click',()=>{
 });
 
 lostReplayBtn.addEventListener('click',()=>{
+   removeCharacters(cat);
+   removeCharacters(alien);
    addHiddenClass(lostBox);
    addCharacter(numberOfCats, cat);
    addCharacter(numberOfAliens, alien);
@@ -186,16 +189,15 @@ alienImages.addEventListener('click', event => {
 
 
 catsImages.addEventListener('click', event => {
-   let index = event.target.dataset.id;
+   let catId = event.target.dataset.id;
 
    catSound.play();
 
-   if(index) {
-      arrOfCats.pop(index);
-      const catDelete = document.querySelector(`.cat[data-id="${index}"]`);
+   if(catId) {
+      arrOfCats.pop(arrOfCats.indexOf(catId));
+      const catDelete = document.querySelector(`.cat[data-id="${catId}"]`);
       catDelete.remove();
       countNum.innerText=`${arrOfCats.length.toString().padStart(2,"0")}`;
-      console.log(arrOfCats.length);
    }
 });
 
