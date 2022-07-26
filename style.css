@@ -53,6 +53,7 @@ button {
     font-family: 'Press Start 2P', cursive;
     margin: 20px 10px;
     padding: 10px 25px;
+    visibility: hidden;
 
 }
 
@@ -64,6 +65,7 @@ button {
     padding: 15px 10px;
     border: solid 2px;
     border-radius: 50%;
+    visibility: hidden;
 }
 
 .stop_btn {
@@ -79,6 +81,7 @@ button {
     border: solid 2px var(--color--white);
     color: var(--color--white);
     font-family: 'Press Start 2P', cursive;
+    visibility: hidden;
 }
 
 /* game-field */
@@ -107,6 +110,7 @@ button {
     border-color: var(--color--white);
     border-radius: 3px;
     font-family: 'Press Start 2P', cursive;
+    visibility: visible;
 }
 
 .start_btn:hover {

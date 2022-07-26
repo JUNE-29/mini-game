@@ -16,23 +16,71 @@ const catSound = document.querySelector('.cat_pull_audio');
 
 const alienSound = document.querySelector('.alien_pull_audio');
 
-const sec = document.querySelector('.timer__second');
+const gameTimer = document.querySelector('.game__timer');
 
 const bgSound = document.querySelector('.bg_sound');
 
-const countNum = document.querySelector('.game__score');
+const gameScore = document.querySelector('.game__score');
 
 const CHARACTER_SIZE = 60;
-const numberOfCats = 10;
-const cat = 'cat';
-let arrOfCats = [];
+const CAT_COUNT = 5;
+const ALIEN_COUNT = 5;
+const GAME_DURATION_SEC= 10;
 
-const numberOfAliens = 7;
-const alien = 'alien';
+const CAT = 'cat';
+const ALIEN = 'alien';
+
+let arrOfCats = [];
 let arrOfAliens = [];
 
-let timeout;
-let seconds = 10;
+let started = false;
+let timer = undefined; 
+
+startBtn.addEventListener('click', () => {
+   if (started) {
+      stopGame();
+   } else {
+      startGame();
+   }
+
+   started = !started;
+});
+
+function startGame() {
+   initGame();
+   showStopButton();
+   showTimerAndScore();
+}
+
+function stopGame() {
+   
+}
+
+function showStopButton() {
+   stopBtn.style.visibility = 'visible';
+}
+
+function hideStopButton() {
+   stopBtn.style.visibility = 'hidden';
+}
+
+function showTimerAndScore() {
+   gameTimer.style.visibility = 'visible';
+   gameScore.style.visibility = 'visible';
+}
+
+function hideStartButton() {
+   startBtn.style.visibility = 'hidden';
+}
+
+function initGame() {
+   gameScore.innerText=`${CAT_COUNT.toString().padStart(2,"0")}`;
+   addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
+   addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
+   hideStartButton();
+   bgSound.play();
+   startGameTimer();
+}
 
 function addHiddenClass(name) {
    name.classList.add('hidden');
@@ -42,46 +90,40 @@ function removeHiddenClass(name) {
    name.classList.remove('hidden');
 }
 
-function countStop() {
-   clearTimeout(timeout);
-   seconds = 10;
-}
-
 function stopMusic() {
    bgSound.pause();
    bgSound.currentTime = 0;
 }
 
-function countTime() {
-   sec.innerText = `${seconds.toString().padStart(2,"0")}`;
+function startGameTimer() {
+   let remainingTimeSec = GAME_DURATION_SEC;
+   updateTimerText(remainingTimeSec);
+   timer =  setInterval(()=>{
+      
+      // if(arrOfCats.length == 0) {
+      //    stopMusic();
+      //    removeHiddenClass(replayBox);
+      //    return;
+      // }
 
-   seconds--;
-
-   // if(arrOfCats.length == 0) {
-   //    countStop();
-   //    stopMusic();
-   //    removeHiddenClass(replayBox);
-   //    return;
-   // }
-
-   if(seconds < 0) {
-      addHiddenClass(stopBtn);
-      removeCharacters(cat);
-      removeCharacters(alien);
-      removeHiddenClass(lostBox);
-      stopMusic();
-      return;
-   }
-   timeout = setTimeout(countTime, 1000);
+      if(remainingTimeSec <= 0) {
+         clearInterval(timer);
+         hideStopButton();
+         removeCharacters(CAT);
+         removeCharacters(ALIEN);
+         removeHiddenClass(lostBox);
+         stopMusic();
+         return;
+      }
+      updateTimerText(--remainingTimeSec);
+   }, 1000);
 }
 
-function startGame() {
-   bgSound.play();
-   countStop();
-   countNum.innerText=`10`;
-   addHiddenClass(startBtn);
-   removeHiddenClass(stopBtn);
-   countTime();
+function updateTimerText(time) {
+   const minutes = Math.floor(time / 60);
+   const seconds = time % 60;
+   gameTimer.innerText =  `${minutes.toString().padStart(2,"0")}:${seconds.toString().padStart(2,"0")}`;
+   
 }
 
 function randomNumber(min, max) {
@@ -112,45 +154,37 @@ function addCharacter(count, characterName, imgPath) {
 }
    
 function removeCharacters(characterName) {
-      if(characterName === cat) {
+      if(characterName === CAT) {
          console.log(arrOfCats);
          arrOfCats.forEach((cats)=>{cats.remove();});
          arrOfCats = [];
       } 
-      else if(characterName === alien) { 
+      else if(characterName === ALIEN) { 
          arrOfAliens.forEach((aliens)=>{aliens.remove();});
          arrOfAliens = [];
       }
 }
 
-startBtn.addEventListener('click', () => {
-   addCharacter(numberOfCats, cat, 'static/img/cat.png');
-   addCharacter(numberOfAliens, alien, 'static/img/alien.png');
-   startGame();
-});
-
 stopBtn.addEventListener('click',()=>{
    removeHiddenClass(replayBox);
-   countStop();
    stopMusic();
 });
 
-
 replayBtn.addEventListener('click',()=>{
-   removeCharacters(cat);
-   removeCharacters(alien);
+   removeCharacters(CAT);
+   removeCharacters(ALIEN);
    addHiddenClass(replayBox);
-   addCharacter(numberOfCats, cat, 'static/img/cat.png');
-   addCharacter(numberOfAliens, alien, 'static/img/alien.png');
+   addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
+   addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
    startGame();
 });
 
 lostReplayBtn.addEventListener('click',()=>{
-   removeCharacters(cat);
-   removeCharacters(alien);
+   removeCharacters(CAT);
+   removeCharacters(ALIEN);
    addHiddenClass(lostBox);
-   addCharacter(numberOfCats, cat, 'static/img/cat.png');
-   addCharacter(numberOfAliens, alien, 'static/img/alien.png');
+   addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
+   addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
    startGame();
 });
 
@@ -164,7 +198,6 @@ lostReplayBtn.addEventListener('click',()=>{
 //       removeHiddenClass(lostBox);
 //       removeCharacters(cat);
 //       removeCharacters(alien);
-//       countStop();
 //       stopMusic();
 //    }
 // });
