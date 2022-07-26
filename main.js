@@ -1,3 +1,8 @@
+"use strict";
+
+const field = document.querySelector('.game__field');
+const fieldRect = field.getBoundingClientRect();
+
 const startBtn = document.querySelector('.start_btn');
 const stopBtn = document.querySelector('.stop_btn');
 
@@ -7,10 +12,8 @@ const replayBox = document.querySelector('.replay_box');
 const lostBox = document.querySelector('.youLost_box');
 const lostReplayBtn = document.querySelector('.lost_replay_btn');
 
-const catsImages = document.querySelector('.cats_images');
 const catSound = document.querySelector('.cat_pull_audio');
 
-const alienImages = document.querySelector('.alien_images');
 const alienSound = document.querySelector('.alien_pull_audio');
 
 const sec = document.querySelector('.timer__second');
@@ -19,6 +22,7 @@ const bgSound = document.querySelector('.bg_sound');
 
 const countNum = document.querySelector('.game__score');
 
+const CHARACTER_SIZE = 60;
 const numberOfCats = 10;
 const cat = 'cat';
 let arrOfCats = [];
@@ -53,12 +57,12 @@ function countTime() {
 
    seconds--;
 
-   if(arrOfCats.length == 0) {
-      countStop();
-      stopMusic();
-      removeHiddenClass(replayBox);
-      return;
-   }
+   // if(arrOfCats.length == 0) {
+   //    countStop();
+   //    stopMusic();
+   //    removeHiddenClass(replayBox);
+   //    return;
+   // }
 
    if(seconds < 0) {
       addHiddenClass(stopBtn);
@@ -80,55 +84,33 @@ function startGame() {
    countTime();
 }
 
-function getRandomIntInclusive(min, max) {
-   min = Math.ceil(min);
-   max = Math.floor(max);
-   return Math.floor(Math.random() * (max - min + 1)) + min; 
+function randomNumber(min, max) {
+   return Math.random() * (max - min) + min; 
 }
 
-let id = 10;
+function addCharacter(count, characterName, imgPath) {
+   const x1 = 0;
+   const y1 = 0;
+   const x2 = fieldRect.width - CHARACTER_SIZE;
+   const y2 = fieldRect.height - CHARACTER_SIZE;
 
-function addCharacter(numberOf, characterName) {
-   let number = numberOf;
-   let character;
+   for (let i = 0; count > i; i++) {
+      const character = document.createElement('img');
+      character.setAttribute('class', characterName);
+      character.setAttribute('src', imgPath);
+      character.style.position = 'absolute';
+      character.style.cursor = 'pointer';
 
-   // id = 0;
+      const x = randomNumber(x1, x2);
+      const y = randomNumber(y1, y2);
 
-   for (i = 0; number > i; i++) {
-      if(characterName === cat) {
-         character = createCharacters(cat);
-         catsImages.appendChild(character);
-      }else if(characterName === alien) {
-         character = createCharacters(alien);
-         alienImages.appendChild(character);
-      }
+      character.style.left =`${x}px`;
+      character.style.top =`${y}px`;
+      
+      field.appendChild(character);
    }
 }
    
-function createCharacters(characterName) {
-   let x = getRandomIntInclusive(100, 900);
-   let y = getRandomIntInclusive(200, 400);
-
-   const character = document.createElement('img');
-   if(characterName === cat) {
-      character.setAttribute('class', cat);
-      character.setAttribute('src', 'static/img/cat.png');
-      character.setAttribute('data-name', cat);
-      character.setAttribute('data-id', id);
-      arrOfCats.push(character);
-      id++;
-
-   } else if(characterName === alien) {
-      character.setAttribute('class', alien);
-      character.setAttribute('src', 'static/img/alien.png');
-      character.setAttribute('data-name', alien);
-      arrOfAliens.push(character);
-   }
-      character.style.left =`${x}px`;
-      character.style.top =`${y}px`;
-      return character;
-}
-
 function removeCharacters(characterName) {
       if(characterName === cat) {
          console.log(arrOfCats);
@@ -142,8 +124,8 @@ function removeCharacters(characterName) {
 }
 
 startBtn.addEventListener('click', () => {
-   addCharacter(numberOfCats, cat);
-   addCharacter(numberOfAliens, alien);
+   addCharacter(numberOfCats, cat, 'static/img/cat.png');
+   addCharacter(numberOfAliens, alien, 'static/img/alien.png');
    startGame();
 });
 
@@ -158,8 +140,8 @@ replayBtn.addEventListener('click',()=>{
    removeCharacters(cat);
    removeCharacters(alien);
    addHiddenClass(replayBox);
-   addCharacter(numberOfCats, cat);
-   addCharacter(numberOfAliens, alien);
+   addCharacter(numberOfCats, cat, 'static/img/cat.png');
+   addCharacter(numberOfAliens, alien, 'static/img/alien.png');
    startGame();
 });
 
@@ -167,37 +149,36 @@ lostReplayBtn.addEventListener('click',()=>{
    removeCharacters(cat);
    removeCharacters(alien);
    addHiddenClass(lostBox);
-   addCharacter(numberOfCats, cat);
-   addCharacter(numberOfAliens, alien);
+   addCharacter(numberOfCats, cat, 'static/img/cat.png');
+   addCharacter(numberOfAliens, alien, 'static/img/alien.png');
    startGame();
 });
 
 
-alienImages.addEventListener('click', event => {
-   let aliens = event.target.dataset.name;
+// alienImages.addEventListener('click', event => {
+//    let aliens = event.target.dataset.name;
 
-   alienSound.play();
+//    alienSound.play();
    
-   if(aliens) {
-      removeHiddenClass(lostBox);
-      removeCharacters(cat);
-      removeCharacters(alien);
-      countStop();
-      stopMusic();
-   }
-});
+//    if(aliens) {
+//       removeHiddenClass(lostBox);
+//       removeCharacters(cat);
+//       removeCharacters(alien);
+//       countStop();
+//       stopMusic();
+//    }
+// });
 
 
-catsImages.addEventListener('click', event => {
-   let catId = event.target.dataset.id;
+// catsImages.addEventListener('click', event => {
+//    let catId = event.target.dataset.id;
 
-   catSound.play();
+//    catSound.play();
 
-   if(catId) {
-      arrOfCats.pop(arrOfCats.indexOf(catId));
-      const catDelete = document.querySelector(`.cat[data-id="${catId}"]`);
-      catDelete.remove();
-      countNum.innerText=`${arrOfCats.length.toString().padStart(2,"0")}`;
-   }
-});
-
+//    if(catId) {
+//       arrOfCats.pop(arrOfCats.indexOf(catId));
+//       const catDelete = document.querySelector(`.cat[data-id="${catId}"]`);
+//       catDelete.remove();
+//       countNum.innerText=`${arrOfCats.length.toString().padStart(2,"0")}`;
+//    }
+// });
