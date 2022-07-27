@@ -11,9 +11,6 @@ const popUpConts = document.querySelector('.pop_up_contents');
 
 const replayBtn = document.querySelector('.replay_btn');
 
-const lostBox = document.querySelector('.youLost_box');
-const lostReplayBtn = document.querySelector('.lost_replay_btn');
-
 const catSound = document.querySelector('.cat_pull_audio');
 const alienSound = document.querySelector('.alien_pull_audio');
 const bgSound = document.querySelector('.bg_sound');
@@ -33,7 +30,11 @@ let arrOfCats = [];
 let arrOfAliens = [];
 
 let started = false;
+let score = 0;
 let timer = undefined; 
+
+
+field.addEventListener('click', onFieldClick);
 
 startBtn.addEventListener('click', () => {
    if (started) {
@@ -41,20 +42,37 @@ startBtn.addEventListener('click', () => {
    } else {
       startGame();
    }
-   started = !started;
+});
+
+stopBtn.addEventListener('click',()=>{
+   stopGame();
+});
+
+replayBtn.addEventListener('click',()=>{
+   startGame();
+   addHiddenClass(popUp);
 });
 
 function startGame() {
+   started = true;
+   score = 0;
    initGame();
    showStopButton();
    showTimerAndScore();
 }
 
 function stopGame() {
+   started = false;
    stopGameTimer();
    hideStopButton();
    stopMusic();
    showPopUpWithText('replay? 💥🔫');
+}
+
+function finishGame(win) {
+   started = false;
+   hideStopButton();
+   showPopUpWithText(win? 'YOU WON!!😻' : 'YOU LOST!!😿');
 }
 
 function showStopButton() {
@@ -91,18 +109,10 @@ function startGameTimer() {
    let remainingTimeSec = GAME_DURATION_SEC;
    updateTimerText(remainingTimeSec);
    timer =  setInterval(()=>{
-      
-      // if(arrOfCats.length == 0) {
-      //    stopMusic();
-      //    removeHiddenClass(replayBox);
-      //    return;
-      // }
-
       if(remainingTimeSec <= 0) {
          clearInterval(timer);
+         finishGame(CAT_COUNT === score);
          hideStopButton();
-         removeCharacters(CAT);
-         removeCharacters(ALIEN);
          stopMusic();
          return;
       }
@@ -121,8 +131,8 @@ function updateTimerText(time) {
    
 }
 
-function showPopUpWithText(text1) {
-   popUpConts.innerHTML = text1;
+function showPopUpWithText(text) {
+   popUpConts.innerHTML = text;
    removeHiddenClass(popUp);
 }
 
@@ -134,6 +144,30 @@ function initGame() {
    hideStartButton();
    bgSound.play();
    startGameTimer();
+}
+
+function onFieldClick(event) {
+   if(!started) {
+      return;
+   }
+   const target = event.target;
+   if(target.matches('.cat')) {
+      target.remove();
+      score++;
+      updateScoreBoard();
+
+      if(score === CAT_COUNT) {
+         stopGameTimer();
+         finishGame(true);
+      }
+   } else if(target.matches('.alien')) {
+      stopGameTimer();
+      finishGame(false);
+   }
+}
+
+function updateScoreBoard() {
+   gameScore.innerText = (CAT_COUNT - score).toString().padStart(2,"0");
 }
 
 function addCharacter(count, characterName, imgPath) {
@@ -163,50 +197,4 @@ function randomNumber(min, max) {
    return Math.random() * (max - min) + min; 
 }
    
-stopBtn.addEventListener('click',()=>{
-   stopGame();
-});
 
-replayBtn.addEventListener('click',()=>{
-   addHiddenClass(popUp);
-   addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
-   addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
-   startGame();
-});
-
-// lostReplayBtn.addEventListener('click',()=>{
-//    removeCharacters(CAT);
-//    removeCharacters(ALIEN);
-//    addHiddenClass(lostBox);
-//    addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
-//    addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
-//    startGame();
-// });
-
-
-// alienImages.addEventListener('click', event => {
-//    let aliens = event.target.dataset.name;
-
-//    alienSound.play();
-   
-//    if(aliens) {
-//       removeHiddenClass(lostBox);
-//       removeCharacters(cat);
-//       removeCharacters(alien);
-//       stopMusic();
-//    }
-// });
-
-
-// catsImages.addEventListener('click', event => {
-//    let catId = event.target.dataset.id;
-
-//    catSound.play();
-
-//    if(catId) {
-//       arrOfCats.pop(arrOfCats.indexOf(catId));
-//       const catDelete = document.querySelector(`.cat[data-id="${catId}"]`);
-//       catDelete.remove();
-//       countNum.innerText=`${arrOfCats.length.toString().padStart(2,"0")}`;
-//    }
-// });
