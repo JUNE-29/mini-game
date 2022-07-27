@@ -148,6 +148,7 @@ button {
 
 .pop_up_contents {
     font-size: 20px;
+    line-height: 35px;
     color: var(--color--white);
     font-family: 'Press Start 2P', cursive;
 }

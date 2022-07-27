@@ -6,20 +6,19 @@ const fieldRect = field.getBoundingClientRect();
 const startBtn = document.querySelector('.start_btn');
 const stopBtn = document.querySelector('.stop_btn');
 
+const popUp = document.querySelector('.pop-up');
+const popUpConts = document.querySelector('.pop_up_contents');
+
 const replayBtn = document.querySelector('.replay_btn');
-const replayBox = document.querySelector('.replay_box');
 
 const lostBox = document.querySelector('.youLost_box');
 const lostReplayBtn = document.querySelector('.lost_replay_btn');
 
 const catSound = document.querySelector('.cat_pull_audio');
-
 const alienSound = document.querySelector('.alien_pull_audio');
-
-const gameTimer = document.querySelector('.game__timer');
-
 const bgSound = document.querySelector('.bg_sound');
 
+const gameTimer = document.querySelector('.game__timer');
 const gameScore = document.querySelector('.game__score');
 
 const CHARACTER_SIZE = 60;
@@ -42,7 +41,6 @@ startBtn.addEventListener('click', () => {
    } else {
       startGame();
    }
-
    started = !started;
 });
 
@@ -53,7 +51,10 @@ function startGame() {
 }
 
 function stopGame() {
-   
+   stopGameTimer();
+   hideStopButton();
+   stopMusic();
+   showPopUpWithText('replay? 💥🔫');
 }
 
 function showStopButton() {
@@ -71,15 +72,6 @@ function showTimerAndScore() {
 
 function hideStartButton() {
    startBtn.style.visibility = 'hidden';
-}
-
-function initGame() {
-   gameScore.innerText=`${CAT_COUNT.toString().padStart(2,"0")}`;
-   addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
-   addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
-   hideStartButton();
-   bgSound.play();
-   startGameTimer();
 }
 
 function addHiddenClass(name) {
@@ -111,12 +103,15 @@ function startGameTimer() {
          hideStopButton();
          removeCharacters(CAT);
          removeCharacters(ALIEN);
-         removeHiddenClass(lostBox);
          stopMusic();
          return;
       }
       updateTimerText(--remainingTimeSec);
    }, 1000);
+}
+
+function stopGameTimer() {
+   clearInterval(timer);
 }
 
 function updateTimerText(time) {
@@ -126,8 +121,19 @@ function updateTimerText(time) {
    
 }
 
-function randomNumber(min, max) {
-   return Math.random() * (max - min) + min; 
+function showPopUpWithText(text1) {
+   popUpConts.innerHTML = text1;
+   removeHiddenClass(popUp);
+}
+
+function initGame() {
+   field.innerHTML = '';
+   gameScore.innerText=`${CAT_COUNT.toString().padStart(2,"0")}`;
+   addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
+   addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
+   hideStartButton();
+   bgSound.play();
+   startGameTimer();
 }
 
 function addCharacter(count, characterName, imgPath) {
@@ -152,41 +158,30 @@ function addCharacter(count, characterName, imgPath) {
       field.appendChild(character);
    }
 }
-   
-function removeCharacters(characterName) {
-      if(characterName === CAT) {
-         console.log(arrOfCats);
-         arrOfCats.forEach((cats)=>{cats.remove();});
-         arrOfCats = [];
-      } 
-      else if(characterName === ALIEN) { 
-         arrOfAliens.forEach((aliens)=>{aliens.remove();});
-         arrOfAliens = [];
-      }
-}
 
+function randomNumber(min, max) {
+   return Math.random() * (max - min) + min; 
+}
+   
 stopBtn.addEventListener('click',()=>{
-   removeHiddenClass(replayBox);
-   stopMusic();
+   stopGame();
 });
 
 replayBtn.addEventListener('click',()=>{
-   removeCharacters(CAT);
-   removeCharacters(ALIEN);
-   addHiddenClass(replayBox);
+   addHiddenClass(popUp);
    addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
    addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
    startGame();
 });
 
-lostReplayBtn.addEventListener('click',()=>{
-   removeCharacters(CAT);
-   removeCharacters(ALIEN);
-   addHiddenClass(lostBox);
-   addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
-   addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
-   startGame();
-});
+// lostReplayBtn.addEventListener('click',()=>{
+//    removeCharacters(CAT);
+//    removeCharacters(ALIEN);
+//    addHiddenClass(lostBox);
+//    addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
+//    addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
+//    startGame();
+// });
 
 
 // alienImages.addEventListener('click', event => {
