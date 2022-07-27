@@ -152,3 +152,15 @@ button {
     color: var(--color--white);
     font-family: 'Press Start 2P', cursive;
 }
+
+/* character */
+
+.cat,
+.alien {
+    transition: transform 100ms ease-in;
+}
+
+.cat:hover,
+.alien:hover {
+    transform: scale(1.1);
+}

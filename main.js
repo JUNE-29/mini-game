@@ -5,34 +5,31 @@ const fieldRect = field.getBoundingClientRect();
 
 const startBtn = document.querySelector('.start_btn');
 const stopBtn = document.querySelector('.stop_btn');
+const replayBtn = document.querySelector('.replay_btn');
 
 const popUp = document.querySelector('.pop-up');
 const popUpConts = document.querySelector('.pop_up_contents');
-
-const replayBtn = document.querySelector('.replay_btn');
-
-const catSound = document.querySelector('.cat_pull_audio');
-const alienSound = document.querySelector('.alien_pull_audio');
-const bgSound = document.querySelector('.bg_sound');
 
 const gameTimer = document.querySelector('.game__timer');
 const gameScore = document.querySelector('.game__score');
 
 const CHARACTER_SIZE = 60;
-const CAT_COUNT = 5;
-const ALIEN_COUNT = 5;
+const CAT_COUNT = 10;
+const ALIEN_COUNT = 7;
 const GAME_DURATION_SEC= 10;
 
 const CAT = 'cat';
 const ALIEN = 'alien';
 
-let arrOfCats = [];
-let arrOfAliens = [];
+const catSound = new Audio('static/audio/cat_pull.mp3');
+const alienSound = new Audio('static/audio/alien_pull.mp3');
+const bgSound = new Audio('static/audio/bg.mp3');
+const winSound = new Audio('static/audio/game_win.mp3');
+const alertSound = new Audio('static/audio/alert.mp3');
 
 let started = false;
 let score = 0;
 let timer = undefined; 
-
 
 field.addEventListener('click', onFieldClick);
 
@@ -55,23 +52,31 @@ replayBtn.addEventListener('click',()=>{
 
 function startGame() {
    started = true;
-   score = 0;
    initGame();
    showStopButton();
    showTimerAndScore();
+   playSound(bgSound);
 }
 
 function stopGame() {
    started = false;
    stopGameTimer();
    hideStopButton();
-   stopMusic();
+   playSound(alertSound);
+   stopSound(bgSound);
    showPopUpWithText('replay? 💥🔫');
 }
 
 function finishGame(win) {
    started = false;
    hideStopButton();
+   if(win) {
+      playSound(winSound);
+   } else {
+      playSound(alienSound);
+   }
+   stopGameTimer();
+   stopSound(bgSound);
    showPopUpWithText(win? 'YOU WON!!😻' : 'YOU LOST!!😿');
 }
 
@@ -100,11 +105,6 @@ function removeHiddenClass(name) {
    name.classList.remove('hidden');
 }
 
-function stopMusic() {
-   bgSound.pause();
-   bgSound.currentTime = 0;
-}
-
 function startGameTimer() {
    let remainingTimeSec = GAME_DURATION_SEC;
    updateTimerText(remainingTimeSec);
@@ -113,7 +113,7 @@ function startGameTimer() {
          clearInterval(timer);
          finishGame(CAT_COUNT === score);
          hideStopButton();
-         stopMusic();
+         stopSound(bgSound);
          return;
       }
       updateTimerText(--remainingTimeSec);
@@ -137,12 +137,12 @@ function showPopUpWithText(text) {
 }
 
 function initGame() {
+   score = 0;
    field.innerHTML = '';
    gameScore.innerText=`${CAT_COUNT.toString().padStart(2,"0")}`;
    addCharacter(CAT_COUNT, CAT, 'static/img/cat.png');
    addCharacter(ALIEN_COUNT, ALIEN, 'static/img/alien.png');
    hideStartButton();
-   bgSound.play();
    startGameTimer();
 }
 
@@ -154,16 +154,24 @@ function onFieldClick(event) {
    if(target.matches('.cat')) {
       target.remove();
       score++;
+      playSound(catSound);
       updateScoreBoard();
 
       if(score === CAT_COUNT) {
-         stopGameTimer();
          finishGame(true);
       }
    } else if(target.matches('.alien')) {
-      stopGameTimer();
       finishGame(false);
    }
+}
+
+function playSound(sound) {
+   sound.currentTime = 0;
+   sound.play();
+}
+
+function stopSound(sound) {
+   sound.pause();
 }
 
 function updateScoreBoard() {
