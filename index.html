@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>mini-game</title>
     <script src="https://kit.fontawesome.com/5b865e8a30.js" crossorigin="anonymous"></script>
-    <script src="main.js" defer></script>
+    <script type="module" src="src/main.js" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,20 +19,12 @@
                 <button class="start_btn">START</button>
             </div>
         </section>
-        <section class="audio_files">
-            <audio class="cat_pull_audio" src="static/audio/cat_pull.mp3"></audio>
-            <audio src="static/audio/alien_pull.mp3" class="alien_pull_audio"></audio>
-            <audio class="bg_sound" src="static/audio/bg.mp3"></audio>
-        </section>
     </section>
-        <section class="pop-up hidden">
-                <div class="replay_box">
-                    <button class="replay_btn pop_up_btn">
-                        <i class="fa-solid fa-rotate-right"></i>
-                    </button>
-                    <p class="pop_up_contents">replay?</p>
-                </div>
-            </div>
+        <section class="pop-up hide">
+                <button class="replay_btn pop_up_btn">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <p class="pop_up_contents">replay?</p>
         </section>
 </body>
 </html>
