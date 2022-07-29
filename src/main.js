@@ -2,6 +2,7 @@
 
 import Popup from './popup.js';
 import Field from './field.js';
+import * as sound from './sound.js';
 
 const startBtn = document.querySelector('.start_btn');
 const stopBtn = document.querySelector('.stop_btn');
@@ -12,12 +13,6 @@ const gameScore = document.querySelector('.game__score');
 const CAT_COUNT = 10;
 const ALIEN_COUNT = 7;
 const GAME_DURATION_SEC= 10;
-
-const catSound = new Audio('static/audio/cat_pull.mp3');
-const alienSound = new Audio('static/audio/alien_pull.mp3');
-const bgSound = new Audio('static/audio/bg.mp3');
-const winSound = new Audio('static/audio/game_win.mp3');
-const alertSound = new Audio('static/audio/alert.mp3');
 
 let started = false;
 let score = 0;
@@ -42,7 +37,6 @@ function onCharacterClick(character) {
          finishGame(true);
       }
    } else if(character === 'alien') {
-      console.log('alien!!!222');
       finishGame(false);
    }
 }
@@ -65,15 +59,15 @@ function startGame() {
    showStopButton();
    showTimerAndScore();
    startGameTimer();
-   playSound(bgSound);
+   sound.playBackground();
 }
 
 function stopGame() {
    started = false;
    stopGameTimer();
    hideStopButton();
-   playSound(alertSound);
-   stopSound(bgSound);
+   sound.playAlert();
+   sound.stopBackground();
    gameFinishBanner.showWithText('replay? 💥🔫');
 }
 
@@ -81,12 +75,12 @@ function finishGame(win) {
    started = false;
    hideStopButton();
    if(win) {
-      playSound(winSound);
+      sound.playWin();
    } else {
-      playSound(alertSound);
+      sound.playAlien();
    }
    stopGameTimer();
-   stopSound(bgSound);
+   sound.stopBackground();
    gameFinishBanner.showWithText(win? 'YOU WON!!😻' : 'YOU LOST!!😿');
 }
 
@@ -115,7 +109,7 @@ function startGameTimer() {
          clearInterval(timer);
          finishGame(CAT_COUNT === score);
          hideStopButton();
-         stopSound(bgSound);
+         sound.stopBackground();
          return;
       }
       updateTimerText(--remainingTimeSec);
@@ -138,15 +132,6 @@ function initGame() {
    gameScore.innerText=`${CAT_COUNT.toString().padStart(2,"0")}`;
    gameField.init();
    hideStartButton();
-}
-
-function playSound(sound) {
-   sound.currentTime = 0;
-   sound.play();
-}
-
-function stopSound(sound) {
-   sound.pause();
 }
 
 function updateScoreBoard() {

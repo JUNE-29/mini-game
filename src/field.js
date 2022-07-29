@@ -1,7 +1,5 @@
 "use strict";
-
-const catSound = new Audio('static/audio/cat_pull.mp3');
-const alienSound = new Audio('static/audio/alien_pull.mp3');
+import * as sound from './sound.js';
 
 const CHARACTER_SIZE = 60;
 
@@ -50,11 +48,9 @@ export default class Field {
         const target = event.target;
         if(target.matches('.cat')) {
             target.remove();
-            playSound(catSound);
+            sound.playCat();
             this.onCharacterClick && this.onCharacterClick('cat');
         } else if(target.matches('.alien')) {
-            playSound(alienSound)
-            console.log('alien!!!!');
             this.onCharacterClick && this.onCharacterClick('alien');
         }
     }
@@ -62,9 +58,4 @@ export default class Field {
 
 function randomNumber(min, max) {
     return Math.random() * (max - min) + min; 
-}
-
-function playSound(sound) {
-    sound.currentTime = 0;
-    sound.play();
 }
