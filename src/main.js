@@ -1,7 +1,8 @@
 "use strict";
 
 import Popup from './popup.js';
-import GameBuilder from './game.js';
+import {GameBuilder, Reaseon} from './game.js';
+import * as sound from './sound.js';
 
 const gameFinishBanner =  new Popup();
 const game = new GameBuilder()
@@ -13,14 +14,17 @@ const game = new GameBuilder()
 game.setGameStopListener((reason) => {
    let message;
    switch(reason) {
-      case 'cancel':
+      case Reaseon.cancel:
          message = 'replay? 💥🔫';
+         sound.playAlert();
          break;
-      case 'win':
+      case Reaseon.win:
          message = 'YOU WON!!😻';
+         sound.playWin();
          break;
-      case 'lose':
+      case Reaseon.lose:
          message = 'YOU LOST!!😿';
+         sound.playAlien();
          break;
       default:
          throw new Error('not valid reasen');

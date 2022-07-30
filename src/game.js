@@ -2,8 +2,14 @@
 import Field from './field.js';
 import * as sound from './sound.js';
 
+export const Reaseon = Object.freeze({
+    win: 'win',
+    lose: 'lose',
+    cancel: 'cancel',
+});
+
 // Builder Pattern
-export default class GameBuilder {
+export class GameBuilder {
     withGameDuration(duration) {
         this.gameDuration = duration;
         return this;
@@ -39,14 +45,14 @@ class Game {
         this.stopBtn = document.querySelector('.stop_btn');
         this.startBtn.addEventListener('click', () => {
             if (this.started) {
-                this.stop();
+                this.stop(Reaseon.cancel);
             } else {
                 this.start();
             }
         });
         
         this.stopBtn.addEventListener('click',()=>{
-            this.stop();
+            this.stop(Reaseon.cancel);
         });
 
         this.gameTimer = document.querySelector('.game__timer');
@@ -73,26 +79,12 @@ class Game {
         sound.playBackground();
     }
     
-    stop() {
+    stop(reason) {
         this.started = false;
         this.stopGameTimer();
         this.hideStopButton();
-        sound.playAlert();
         sound.stopBackground();
-        this.onGameStop && this.onGameStop('cancel');
-    }
-
-    finish(win) {
-        this.started = false;
-        this.hideStopButton();
-        if(win) {
-            sound.playWin();
-        } else {
-            sound.playAlien();
-        }
-        this.stopGameTimer();
-        sound.stopBackground();
-        this.onGameStop && this.onGameStop(win? 'win': 'lose');
+        this.onGameStop && this.onGameStop(reason);
     }
 
     onCharacterClick = (character) => {
@@ -103,10 +95,10 @@ class Game {
             this.score++;
             this.updateScoreBoard();
             if(this.score === this.catCount) {
-                this.finish(true);
+                this.stop(Reaseon.win);
             }
         } else if(character === 'alien') {
-            this.finish(false);
+            this.stop(Reaseon.lose);
         }
     }
 
@@ -133,7 +125,7 @@ class Game {
         this.timer =  setInterval(()=>{
         if(remainingTimeSec <= 0) {
                 clearInterval(this.timer);
-                this.finish(this.catCount === this.score);
+                this.stop(this.catCount === this.score? Reaseon.win : Reaseon.cancel);
                 this.hideStopButton();
                 sound.stopBackground();
                 return;
