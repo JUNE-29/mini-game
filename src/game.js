@@ -1,5 +1,5 @@
 "use strict";
-import Field from './field.js';
+import { Field, CharacterType } from './field.js';
 import * as sound from './sound.js';
 
 export const Reaseon = Object.freeze({
@@ -91,13 +91,13 @@ class Game {
         if(!this.started) {
             return;
         }
-        if(character ==='cat') {
+        if(character === CharacterType.cat) {
             this.score++;
             this.updateScoreBoard();
             if(this.score === this.catCount) {
                 this.stop(Reaseon.win);
             }
-        } else if(character === 'alien') {
+        } else if(character === CharacterType.alien) {
             this.stop(Reaseon.lose);
         }
     }

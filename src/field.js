@@ -3,7 +3,12 @@ import * as sound from './sound.js';
 
 const CHARACTER_SIZE = 60;
 
-export default class Field {
+export const CharacterType = Object.freeze({
+    cat: 'cat',
+    alien: 'alien',
+});
+
+export class Field {
     constructor(catCount, alienCount) {
         this.catCount = catCount;
         this.alienCount = alienCount;
@@ -49,9 +54,9 @@ export default class Field {
         if(target.matches('.cat')) {
             target.remove();
             sound.playCat();
-            this.onCharacterClick && this.onCharacterClick('cat');
+            this.onCharacterClick && this.onCharacterClick(CharacterType.cat);
         } else if(target.matches('.alien')) {
-            this.onCharacterClick && this.onCharacterClick('alien');
+            this.onCharacterClick && this.onCharacterClick(CharacterType.alien);
         }
     }
 }
